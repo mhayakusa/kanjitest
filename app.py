@@ -1,10 +1,16 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,session
+import random
 app = Flask(__name__)
+app.secret_key = 'abcdefghijklmn'
+#app.permanent_session_lifetime = timedelta(minutes=3) 
 
 @app.route('/')
 def main():
-   return render_template('index.html')
+    x = random.sample(range(300),20)
+    session.permanent = True  
+    session["qnos"] = x 
+    return render_template('index.html')
 
 @app.route('/getnext' ,methods=['GET','POST'])
 def getnext():
@@ -14,7 +20,7 @@ def getnext():
 def kanjitest():
     kdata =''
     
-    kanjiDataF =  open('kanjiData_2022-04-04.txt','r',encoding='utf8')
+    kanjiDataF =  open('kanjiData_2022-04-09_new.txt','r',encoding='utf8')
     
     if request.method == "GET":
         st_moji_num = request.args.get("mojinum")
@@ -26,13 +32,24 @@ def kanjitest():
     else:
         moji_num = int(st_moji_num)
     
-    name = "test"
+    if (moji_num > 0 & moji_num <=20):
+        if "qnos" in session:
+            x = session["qnos"]
+            kanjiNo = x[moji_num-1]
+        else:
+            kanjiNo = moji_num
+    else:
+        kanjiNo = 1
+        moji_num = 1
+
+    print(moji_num,kanjiNo)
+
     data_count = 0
     taisyouSW = False
     datalist = kanjiDataF.readlines()
     for data in datalist:
         if '--Start--' in data:
-            if data_count + 1 == moji_num:
+            if data_count + 1 == kanjiNo:
                 taisyouSW = True
             data_count += 1
         else:

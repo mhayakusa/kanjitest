@@ -1,0 +1,559 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop</title>
+    <meta name="viewkanji" content="width=device-width, initial-scale=1">
+        <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eeeeee; display: inline; margin: 5 auto; }
+      button {  width: 60px;height: 60px;background: #00ffff; display: inline; margin: 10 auto;}
+      #butn1 { background: #ffccee; }
+    </style>
+  </head>
+
+  <body>
+    <h1>立体漢字テスト</h1>
+        <article>
+        <div id = "main"></div>
+      <!--  <p id="mojinum">{{ mojinum}}</p>-->
+        <h2>第
+          <label type="text" id="mondai">{{ mojinum }}</label>
+          問
+        </h2>
+        <form action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data">
+          <button type="submit" class="calbutton" id="butn4">設問</button>
+        <!--  <input type="input" id="getnum" name="mojinum" placeholder="問題No" value=""> -->
+          <input type="input" id="getnum" name="mojinum" value="" required>
+        </form>
+      <div class="buttonb0x" >
+        <!--  <button type="button" class="calbutton" id="butn1" method="POST" onclick="get_nextkanji()">次の問題</button>-->
+        <form action="/kanjitest" id="netxq">
+          <button type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次に</button>
+        </form>
+            
+            <button type="submit" class="calbutton" id="butn2" onclick="animeStart()">開始</button>
+            <button  type="submit" class="calbutton" id="butn3" onclick="btn3click()">解答</button>
+        </div>
+          <canvas id="myCanvas" width="640" height="480"></canvas>
+        </div>
+        </article>
+      <!--  <p id="kdata">{{ kdata}}</p>-->
+
+<script type="text/javascript">
+        function btn4click(){
+
+        numElement = document.getElementById("nextbtn")
+        mnoST = document.getElementById("mondai").textContent
+        console.log("mnoST",mnoST)
+        mno = Number(mnoST) + 1
+        document.getElementById("mondai").textContent = String(mno)
+        numElement.value = String(mno)
+
+        }
+        function btn3click(){
+          clearInterval(timerId);
+        }
+        
+      var img = null;
+      var pimg = null;
+      var kanjiCubes = [];
+      var teihen_x = 100;
+      var teihen_y = 600;
+      var drop_color = ['pink', 'skyblue', 'green', 'gray', 'tomato', 'navy', 'violet'];
+      var hen = 40;
+      var atusa = 50;
+      var jiku = [[0, 0, 0], [1000, 0, 0], [0, 1000, 0], [0, 0, 1000]];
+      var kyori = 800;
+      var scrn = 50;
+      var shiten = [460, 800, 800];
+      var foucas = [hen * 18, hen * 18, 0];
+      console.log ("foucas:",foucas)
+      var sin_a = 0;
+      var sin_b = 0;
+      var cos_a = 0;
+      var cos_b = 0;
+      var genkai = 100;
+      var plane = [];
+      var cube = [];
+      var CubeDatas=[];
+      var T0 =[];
+      var T1 =[];
+      var T2 =[];
+      var T3 =[];
+      var T4 =[];
+      var kdata = [];
+      var startY =[];
+      var  endY = [];
+      var  houkouY = [];
+      var startX =[];
+      var  endX = [];
+      var  houkouX = [];
+      var a1=0;
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      var dx = 2;
+      var dy = -2;
+      cube = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+      plane = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+      hen = 40;
+      var timerId = '';
+      var tmpdata = '{{ kdata }}';
+      var moji_num = '{{ mojinum }}';
+
+      animeStart()
+      function main(){
+
+        document.getElementById("mondai").textContent = moji_num
+
+        if (kdata=[]){
+
+        } else{
+        animeStart()
+        }
+      }
+//アニメーションスタート
+      function animeStart(){
+        console.log("anime start -----");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        kanjiinit();
+        moveCount = 0
+        a1 = 1
+        shiten = [460, 800, 800];
+        //console.log(kdata)
+        timerId = setInterval(moveKanji,700);
+      }
+
+      function kanjiinit(){
+      // pythonから受けっとった漢字データの文字列（tmpdata）をkdataの配列に変換
+      
+        data_list = tmpdata.split("],");
+        kdata = [];
+        kanjiCubes=[];
+
+        for(let i=0;i< data_list.length;i++){
+          if (data_list[i] != ""){
+            tmpdata2 = data_list[i].replace(/\[|\]/g,"")
+            tmpdata2 = tmpdata2.replace(/ /g,"")
+            tmplist = tmpdata2.split(",").map(Number);
+            
+            kdata.push(tmplist);
+          }
+        }
+      }
+
+      function init_shiten() {
+        shiten = [460, 800, 800];
+        a = foucas[0] - shiten[0]
+
+      };
+
+      function getcube3Dpos(kdata,xx,yy,hen){  //漢字のピットマップの全ての頂点の座標を計算したKanjiCubes を作成する
+    
+        let th = kdata.length;
+        let tw = kdata[yy].length;
+//        let start1 = [xx*hen,(th-1-yy)*hen,0];
+        let start1 = [xx*hen,(th-1-yy)*hen,0];
+        workCube =[[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+        createCube(start1,hen,workCube);
+        return workCube;
+      }
+      function createCube(kiten, hen, cube) {
+          for (var ii = 0; ii < 8; ii++) {
+		      if (ii % 4  < 2) {
+			      cube [ii] [0] = kiten [0];
+		      }
+		      else {
+			      cube [ii] [0] = kiten [0] + hen;
+		      }
+		      if (ii < 4) {
+			      cube [ii] [2] = kiten [2];
+		      }
+		      else {
+			      cube [ii] [2] = kiten [2] + atusa;
+		      }
+		      if (ii % 4 == 1 || ii % 4 == 2) {
+			      cube [ii] [1] = kiten [1];
+		      }
+		      else {
+			      cube [ii] [1] = kiten [1] + hen;
+		      }
+	      }	    
+
+      }
+
+      function draw_polygon(x0,y0,x1,y1,x2,y2,x3,y3,color){
+
+        //ctx.fillStyle = 'rgb(0,0, 255)';
+        ctx.fillStyle =color
+        ctx.beginPath();
+        ctx.moveTo(x0,y0);
+        ctx.lineTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.lineTo(x3,y3);
+        ctx.closePath();
+        ctx.fill();
+//        ctx.stroke();
+      }
+      function draw_kdata(kdata,shiten){ //漢字のビットマップから立体座標に変換したCubeDatasを元に描画する
+        
+        cacl_parm ();  //視点が変化するので変換行列を作成しなおす
+
+        let tCube=[];
+        let ih = kdata.length;
+        let iw = kdata[0].length;
+
+        console.log("startY",startY,endY,houkouY,"startX",startX,endX,houkouX,"shite",shiten)
+        //for (let yy = startY[0]; yy >= end[y] ; yy--) {
+       
+        let yi = 0;
+
+        while(yi < 2 ){
+          if (houkouY[yi] == 0){ //0 の時はshiten[1]　は無効
+            break;
+          }
+          let yy = startY[yi];
+          while(yy != endY[yi]){
+            let xi  = 0;
+            while(xi < 2){
+              if (houkouX[xi] == 0){
+                break;
+              }
+              let xx = startX[xi];
+              //for (let xx = 0; xx < kdata[yy].length; xx++) {
+              while(xx != endX[xi]){
+
+                if (kdata [yy] [xx] != 0) {
+                  let tCube = getcube3Dpos(kdata,xx,yy,hen); // 1つの立方体の8頂点の座標をコピー
+                //console.log(kanjiCubes.length,"idx",idx,"tCube",tCube)
+                  syazou (tCube);
+                  dsp_cube (plane, xx, yy,kdata,tCube);
+                }
+                xx = xx + houkouX[xi]
+              }
+              xi += 1
+            }
+            
+            yy = yy + houkouY[yi]
+          }
+          yi += 1;
+        }
+
+        //視点とフォーカスを描画
+        //var tempx = [];
+        //tempx.push(shiten);
+        //tempx.push(foucas)
+        //console.log("tempx",tempx)
+        //syazou(tempx)
+        //console.log("---shitenn---",plane[0][0],plane[0][1],plane[1][0],plane[1][1])
+        //ctx.fillStyle ="black"
+        //ctx.beginPath();
+        //ctx.moveTo(plane[0][0],700-plane[0][1]);
+        //ctx.lineTo(plane[1][0],700- plane[1][1]);
+        //ctx.stroke();
+        
+      };
+
+      function dsp_cube(plane,xx,yy,kdata,tCube){  //一つの立方体を書く（Planeは8つの頂点の座標を持つ）
+        yhosei = 700
+        for (ii =0;ii < 8 ; ii++){
+        //    a = string(plane[ii][0]);
+              plane[ii][1] = yhosei - plane[ii][1]
+        }
+        let ih = kdata.length;
+        let iw = kdata[0].length;
+        vextUP = false
+        //console.log("x:y",xx,yy,"shite",shiten,"-->",tCube)
+        //正面判断
+        //console.log("iw",iw,"xx",xx);
+         //左面
+         if ((xx > 0 && kdata [yy] [xx - 1] == 0 )|| xx == 0) {
+           //console.log("左面候補",xx,yy,"shiten",shiten,tCube)
+           if (shiten[0] < tCube[0][0]){
+           //   console.log("左面描画");
+		          draw_polygon (plane [0] [0], plane [0] [1], plane [1] [0], plane [1] [1], plane [5] [0], plane [5] [1], plane [4] [0], plane [4] [1], 'violet');
+            }
+	      }
+        //右面
+        if ((xx < iw - 1 && kdata [yy] [xx + 1] == 0 )|| xx == iw -1) {
+            if (shiten[0] > tCube[3][0]){
+		          draw_polygon (plane [2] [0], plane [2] [1], plane [3] [0], plane [3] [1], plane [7] [0], plane [7] [1], plane [6] [0], plane [6] [1], 'pink');
+        //      console.log("右面描画");
+            }
+        } 
+        //上下面
+        if ((yy > 0 && kdata [yy - 1] [xx] == 0) || yy == 0) {
+          if (shiten[1] > tCube[3][1]){
+              draw_polygon (plane [0] [0], plane [0] [1], plane [3] [0], plane [3] [1], plane [7] [0], plane [7] [1], plane [4] [0], plane [4] [1],'gray');
+         //     console.log("上面描画");
+          };
+        };
+          //下面
+        
+        if ((yy < ih - 1 && kdata [yy + 1] [xx] == 0) || yy == ih - 1)  {
+          if (tCube[1][1] >  shiten[1]){
+              draw_polygon (plane [1] [0], plane [1] [1], plane [2] [0], plane [2] [1], plane [6] [0], plane [6] [1], plane [5] [0], plane [5] [1],'gray');
+        //     console.log("下面描画");
+          }
+       }
+          //正面
+        if (shiten[2] > hen){
+          draw_polygon(plane[4][0],plane[4][1],plane[5][0],plane[5][1],plane[6][0],plane[6][1],plane[7][0],plane[7][1],'blue');
+        }
+        if (shiten[2] < 0) {
+          draw_polygon(plane[0][0],plane[0][1],plane[1][0],plane[1][1],plane[2][0],plane[2][1],plane[3][0],plane[3][1],'skyblue');
+        }
+//console.log("sita;",shiten[0],shiten[1],"x,y",xx,yy,tCube[0][0],tCube[0][1])
+        
+	        
+      }
+      
+      function cacl_parm() {
+	      var bunbo1 =  Math.sqrt (Math.pow (shiten [0] - foucas [0], 2) + Math.pow (shiten [2] - foucas [2], 2));
+	      var bunbo2 =  Math.sqrt ((Math.pow (shiten [0] - foucas [0], 2) + Math.pow (shiten [1] - foucas [1], 2)) + Math.pow (shiten [2] - foucas [2], 2));
+	      if (bunbo1 == 0) {
+		        bunbo1 = 1;
+		    }
+	      if (bunbo2 == 0) {
+		        bunbo2 = 0;
+        }
+	      sin_a = (foucas [0] - shiten [0]) / bunbo1;
+	      cos_a = (shiten [2] - foucas [2]) / bunbo1;
+	      sin_b = (shiten [1] - foucas [1]) / bunbo2;
+	      cos_b = bunbo1 / bunbo2;
+	//      T0 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [-(1) * shiten [0], -(1) * shiten [1], -(1) * shiten [2], 1]];
+	      T1 = [[cos_a, sin_a * sin_b, sin_a * cos_b, 0], [0, cos_b, -(1) * sin_b, 0], [sin_a, (-(1) * cos_a) * sin_b, (-(1) * cos_a) * cos_b, 0], [(-(1) * shiten [0]) * cos_a - shiten [2] * sin_a, (((-(1) * shiten [0]) * sin_a) * sin_b - shiten [1] * cos_b) + (shiten [2] * cos_a) * sin_b, (((-(1) * shiten [0]) * sin_a) * cos_a + shiten [1] * sin_b) + (shiten [2] * cos_a) * cos_b, 1]];
+	      T2 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0.5, 0.5], [0, 0, -(0.5), 0]];
+  //      T2 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1], [0, 0, -1, 0]];
+	      T3 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0.1, 0.1], [0, 0, -(100), 0]];
+	      T4 = [[300, 0, 0, 0], [0, 500, 0, 0], [0, 0, 1, 0], [300,500, 0, 1]];
+      }
+
+// syazou
+        function syazou(cube) { //視点からの３D座標変換
+	        plane = [];
+          //console.log("cube:",cube);
+    
+	        for (let xx = 0 ; xx < cube.length; xx++) {
+                let xyz = cube[xx];
+		        if (xyz.length == 3) {
+			        xyz.push (1);
+		        }
+ //           var ary2 = calcMatrix4 (xyz, T0);
+		        var ary2 = calcMatrix4 (xyz, T1);
+		        ary3 = calcMatrix4 (ary2, T2);
+		        ary3 = calcMatrix4 (ary3, T4);
+		        var tx = Math.floor(ary3 [0] / ary3 [3] - 100);
+		        var ty = Math.floor (ary3 [1] / ary3 [3]);
+//                console.log(tx,ty)
+		        plane.push ([tx, ty]);
+	        }
+        };
+      function calcMatrix4(aray1,aray2){
+          
+     //   console.log("matrix:",aray1,aray2)
+        res = [];
+        if (typeof aray1[0] === 'object'){
+            //2次元
+            var jigen = 2;
+            var row1 = aray1.length;
+            var col1 = aray1[0].length;
+        } else {
+            var jigen = 1;
+            var col1 = aray1.length;
+            var row1 = 1;
+        }
+
+        var row2 = aray2.length;  
+        var col2 = aray2[0].length;
+
+        for (ii=0;ii< row1;ii++){
+            if (jigen > 1){
+                res[0] = [];
+            } 
+            for (jj=0;jj< col2;jj++){
+                if (jigen = 1){
+                    res[jj] = 0;
+                } else {
+                    res[ii][jj] = 0;
+                }
+                for (kk=0;kk< col1;kk++){
+                    if (jigen = 1){
+                        res[jj] +=  aray1[kk] * aray2[kk][jj]
+                    } else {
+                        res[ii][jj] +=  aray1[ii][kk] * aray2[kk][jj]
+                    }
+                }
+            }
+        } 
+       // console.log(res)
+        return res;
+      }
+// ------   movekanji
+      function moveKanji(){
+      var r = 2500;
+
+
+        let ih = kdata.length
+        moveCount += 1;
+        
+        if (moveCount > 30){ 
+          clearInterval(timerId);
+        }else {
+          if (moveCount < 15){
+            radian1 = a1 * ( Math.PI / 180 )
+            x = Math.floor((r) * Math.cos(radian1));
+            y = Math.floor((r) * Math.sin(radian1));
+      
+            //shiten[0] = x +500;
+          //  shiten[0] = Math.min(foucas[0]+x , (ih+5)*hen)
+            shiten[0] = foucas[0] + x;
+            shiten[1] = foucas[1] + y;
+//            if (Math.min(Math.abs(shiten[0]),Math.abs(shiten[1])) < ih*hen){
+//              shiten[2] = 1000
+//            }else{
+              shiten[2] = 1000
+ //           }
+
+//            if (Math.abs( foucas[1] - y)>500){
+//            if(Math.min(x,y) < 500 )
+              
+          } else {
+            shiten[2] += 300;
+          }
+          a1 += 15;
+
+        // 陰面消去のため、上から描画と下から描画をわける
+          if (shiten[1] <= 0 ){
+            startY[0] = 0;
+            endY[0] =  kdata.length ;
+            houkouY[0] = 1
+            startY[1] = -999;
+            endY[1] =  -999;
+            houkouY[1] = 0
+          } else if(shiten[1] >= (kdata.length +1) * hen) {
+              startY[0] = kdata.length -1;;
+              endY[0] = -1;
+              houkouY[0] = -1
+              startY[1] = -999;
+              endY[1] =  -999;
+              houkouY[1] = 0;
+         
+          } else {
+            //kdataの配列は上が０なので、indexの計算が複雑
+            bunki = Math.floor(shiten[1] / hen) + 1
+            bunkiIDX = ih -bunki;
+            startY[0] = 0
+            endY[0] =  bunkiIDX + 1;
+            houkouY[0] = 1           
+            startY[1] = kdata.length -1;
+            endY[1] = bunkiIDX ;
+            houkouY[1] = -1
+            ;
+          }
+          if (shiten[0] > (kdata[0].length +1) * hen){
+            startX[0] = 0;
+            endX[0] =  kdata[0].length ;
+            houkouX[0] = 1
+            startX[1] = -999;
+            endX[1] =  -999;
+            houkouX[1] = 0;
+          } else if(shiten[0] < 0 ) {
+              startX[0] = kdata[0].length -1;;
+              endX[0] = -1;
+              houkouX[0] = -1
+              startX[1] =-999;
+              endX[1] =  -999;
+              houkouX[1] = 0;
+         
+          } else {
+            startX[0] = 0;
+            endX[0] =  Math.floor(shiten[0] / hen) + 1;
+            houkouX[0] = 1;
+            startX[1] = kdata[0].length -1;;
+            endX[1] =  Math.floor(shiten[0] / hen);
+            houkouX[1] = -1
+            
+            ;
+          }
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          draw_kdata(kdata,shiten);
+        }
+
+      }  
+  //    xhr.onload = function () {
+  //      alert(`Done, got ${xhr.response}`);
+  //        var tmpdata = '{{ kdata  }}';
+  //        var moji_num = '{{ mojinum }}';
+  //      moveCount = 0
+  //      a1 = 2
+  //      animeStart();
+  //    }
+   //       console.log("modorimasita",moji_num,'{{ mojinum | tojson}}')
+   //   }
+   //   xhr.onreadystatechange = function() {
+   //       if (xhr.readyState == 4 && xhr.status == 200) {
+          //受信完了時の処理
+   //         let url = new URL(window.location.href);
+          // URLSearchParamsオブジェクトを取得
+   //         let params = url.searchParams;
+          // getメソッド
+   //         console.log(params.get('kdata')); // 5
+   //         console.log(params.get('mojinum')); // r
+          
+    //      }
+    //      else {
+    //        console.log("処理中")
+    //      }
+    //    }
+
+      function get_nextkanji(){
+//          alert('Click');
+        numElement = document.getElementById("getnum")
+        mnoST = numElement.value ;
+        mno = Number(mnoST) + 1
+        numElement.value= String(mno)
+  
+  //      var xhr = new XMLHttpRequest();
+  //      alert(`getnext ${moji_num}`);
+  
+  //      mojiNum = Number(moji_num);
+  //      if (mojiNum < 10){
+  //          mojiNum++;
+  //          moji_num = String(mojiNum);
+   //     }
+   //     else {
+   //       moji_num = "1";
+   //     }
+        sendmoji = "/kanjitest?mojinum=" + moji_num;
+   //     xhr.open('GET', sendmoji, false);
+   //     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+   //     alert(`getnext ${sendmoji}`);
+        //xhr.send('mojinum=3');
+   //     xhr.send(Document);
+
+        //xhr.responseType = 'json';
+        
+
+//        xhr.open('GET', '/kanjitest?'+sendmoji, true);
+//        xhr.open('POST', '/kanjitest', true);
+//        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+//        xhr.send(sendmoji);
+//        var result = document.getElementById('mojinum');
+
+//        xhr.open('POST', '/kanjitest', false);
+//        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+//        xhr.send("mojinum=" + moji_num);
+
+    //    xhr.onload = function () {
+    //      alert(`getnext ${xhr.responseURL}`);
+    //    }
+//          var tmpdata = '{{ kdata  }}';
+//          var moji_num = '{{ mojinum }}';
+//          console.log("modorimasita",moji_num,'{{ mojinum | tojson}}')
+     }
+
+    </script>
+  </body>
+</html>

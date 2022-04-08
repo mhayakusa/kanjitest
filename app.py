@@ -7,7 +7,6 @@ def main():
 
 @app.route('/getnext' ,methods=['GET','POST'])
 def getnext():
-    print("getnext です")
     return render_template('/kanjitest.html',mojinum=9)
 
 @app.route('/kanjitest' ,methods=['GET','POST'])
@@ -24,7 +23,6 @@ def kanjitest():
     if st_moji_num == None :
         moji_num = 1
     else:
-        print("-GET -",st_moji_num,"--")
         moji_num = int(st_moji_num)
     
     name = "test"
@@ -48,12 +46,10 @@ def kanjitest():
                     else:
                         kdata =  kdata + ",[" + data + "]"
     kanjiDataF.close()
-
-    #print(kdata)
     
     return render_template('kanjitest.html', kdata=kdata,mojinum=moji_num)
-## おまじない
+
+
 if __name__ == "__main__":
-    print(__name__)
-    app.run(debug=True)
+    app.run()
     

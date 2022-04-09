@@ -33,11 +33,12 @@ def kanjitest():
         if (st_moji_num.isdigit()):
             moji_num = int(st_moji_num)
         else:
-            moji_num = 1    
-    if (moji_num > 0 & moji_num <=20):
+            moji_num = 1   
+    
+    if (moji_num > 0 and moji_num <=20):
         if "qnos" in session:
             x = session["qnos"]
-            kanjiNo = x[moji_num-1]
+            kanjiNo = x[moji_num - 1]
         else:
             kanjiNo = moji_num
     else:

@@ -3,15 +3,30 @@
     <meta charset="utf-8" />
     <title>Gamedev Canvas Workshop</title>
     <meta name="viewkanji" content="width=device-width, initial-scale=1">
-        <style>
-    	* { padding: 0; margin: 0; }
-    	canvas { background: #eeeeee; display: inline; margin: 5 auto; }
-      button {  width: 80px;height: 80px;background: #3ee7; display: inline; font-size:16px; margin: 10 auto;}
+      <style>
+    	* { padding: 5px; margin: 0; }
+    	canvas { background: #eeeeee; display: inline; margin: auto ; }
+      button {  width: 80px;height: 60px;background: #3ee7; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
+      .sample2  {
+                   margin-left:auto;           /* IE以外用の中央寄せ */
+                   margin-right:auto;          /* IE以外用の中央寄せ */
+                   text-align:left;            /* 中身を左寄せに戻す */
+      }
       #butn1 { background: #ffccee; }
+      .container {
+            width: 90%;
+            margin: auto;
+        }
+ 
+        .first-sentence {
+            font-weight: bold;
+        }
     </style>
   </head>
 
   <body>
+
+   <div style="text-align:center;" >
     <h1>立体漢字テスト</h1>
         <article>
         <div id = "main"></div>
@@ -21,24 +36,29 @@
           問
         </h2>
         
-      <div class="buttonb0x" >
-        <!--  <button type="button" class="calbutton" id="butn1" method="POST" onclick="get_nextkanji()">次の問題</button>-->
-        <form action="/kanjitest" id="netxq">
+      <div stype="margin: auto;" >
+        <div class="button" >
+          <ul style="list-style:none;text-align:left;margin-left: 10px;">
+            <li><form action="/kanjitest" id="netxq">
           <button type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
         </form>
 
         <form action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data">
-          <button type="submit" class="calbutton" id="butn4">設問</button>
+    
+            <button type="submit" class="calbutton" id="butn4">番号指定</button>
         <!--  <input type="input" id="getnum" name="mojinum" placeholder="問題No" value=""> -->
-          <input  type="input" id="getnum" name="mojinum" value=""  width="80" height="80" required>
-        </form>
+           <input  type="input" id="getnum" name="mojinum" value=""  width="60px" height="80px" required>
+         </li>
+          </form>
             
-          <button type="submit" class="calbutton" id="butn2" onclick="animeStart()">再描画</button>
+        <li><button type="submit" class="calbutton" id="butn2" onclick="animeStart()">再描画</button>
           <button  type="submit" class="calbutton" id="butn3" onclick="btn3click()">解答</button>
+      </li>
+        </ul>
+        </div>
         </div>
           <canvas id="myCanvas" width="640" height="480"></canvas>
         </div>
-        </article>
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">
@@ -559,5 +579,6 @@
      }
 
     </script>
+  </div>
   </body>
 </html>

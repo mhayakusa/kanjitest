@@ -3,13 +3,56 @@
     <head>
         <meta charset="utf-8">
         <title>漢字テスト</title>
-        <meta name="description" content="">
+        <!--<link rel="stylesheet" href="./style.css"> -->
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+            @media screen and (min-width: 767px) { /*ウィンドウ幅が767px以上の場合に適用*/
+                
+                main {
+                    background-color: #f1bed2; /*青色*/
+                    text-align: center;
+                }
+            }           
+            @media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/
+                main{
+                    background-color: #00FF00; /*緑色*/
+                }
+            }
+            .body{
+                text-align: center;
+            }
+            button {  
+                width: 100px;
+                height: 60px;
+                background: #3ee7; 
+                font-size:16px; font-weight: bold; 
+                align-items: center ;
+                display:inline;
+                padding:10px 0 10px;
+                border-radius: 20px;
+                text-align: center; }
+            .container {
+                width:70%;
+                margin: auto;
+            }
+ 
+            .first-sentence {
+                font-weight: bold;
+            }
+        </style>
     </head>
-    <body>
-        <h1>漢字テスト</h1>
-        <article>
-            <h2>立体漢字のテスト</h2>
-            <a href="/kanjitest">開始</a>
-        </article>
+    <body class="body" >
+        <h1 >立体漢字テスト</h1>
+        <div class="container">
+            <ul style="list-style:none;text-align:left;">
+                <li>色々な角度から見た一文字の立体漢字を描画します。どんな漢字か考えてください。</li>
+                <li>漢検準二級程度の漢字を２０問用意してあります。</li>
+                <li>「解答」ボタンをクリックすると、漢字とその読みが表示されます。</li>
+                <li>「次の問題」ボタンで、次の文字が描画されます。</li>
+                </ul>
+        </div>
+        <div>
+        <button onclick="location.href='/kanjitest'">開始</button>
+        </div>
     </body>
 </html>

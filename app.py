@@ -26,12 +26,14 @@ def kanjitest():
         st_moji_num = request.args.get("mojinum")
     else:
         st_moji_num = request.form.get("mojinum")
-    
+ 
     if st_moji_num == None :
         moji_num = 1
     else:
-        moji_num = int(st_moji_num)
-    
+        if (st_moji_num.isdigit()):
+            moji_num = int(st_moji_num)
+        else:
+            moji_num = 1    
     if (moji_num > 0 & moji_num <=20):
         if "qnos" in session:
             x = session["qnos"]

@@ -7,7 +7,7 @@ app.secret_key = 'abcdefghijklmn'
 
 @app.route('/')
 def main():
-    x = random.sample(range(300),20)
+    x = random.sample(range(328),20)
     session.permanent = True  
     session["qnos"] = x 
     return render_template('index.html')

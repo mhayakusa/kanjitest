@@ -1,10 +1,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>立体漢字テスト</title>
-  <!--  <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <title>立体漢字クイズ</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
       <style>
-    	* { padding: 1px; margin: 0; }
+    	* { padding: 5px; margin: 0; }
       @media screen and (min-width: 767px) { /*ウィンドウ幅が767px以上の場合に適用*/
           main {
                     background-color: #f1bed2; /*青色*/
@@ -16,7 +16,7 @@
                     background-color: #00FF00; /*緑色*/
                 }
             }
-    	canvas { background: #eeeeee; display: inline; margin: auto ; }
+    	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; }
       .buttonA {width: 80px;height: 50px;background: #f63f; color: black; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
       button { width: 80px;height: 50px;background: #3ee7; color: black; 
                 padding:10px 0 10px;
@@ -105,13 +105,13 @@
          <!--   <div class="outputtext"  >
             「再描画」---もう一度同じ漢字の描画が始まります
             </div>-->
-      <div style="width: 70%; margin: auto; padding: 10px; margin-bottom: 10px; border: 1px solid black">
+      <div style="width: 70%; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black">
           <div id="yomi" style="font-weight: bold;"></div>
           <div id="setumeibun" style="font-weight: bold;"></div>
       </div>
-      
-      <canvas id="myCanvas" width="640" height="480"></canvas>
-        
+      <div>
+      <canvas id="myCanvas" width="700" height="500 paddig:50px"></canvas>
+    </div> 
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">

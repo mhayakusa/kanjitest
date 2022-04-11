@@ -2,9 +2,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Gamedev Canvas Workshop</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--  <meta name="viewport" content="width=device-width, initial-scale=1"> -->
       <style>
-    	* { padding: 5px; margin: 0; }
+    	* { padding: 1px; margin: 0; }
       @media screen and (min-width: 767px) { /*ウィンドウ幅が767px以上の場合に適用*/
                 
                 main {
@@ -18,7 +18,8 @@
                 }
             }
     	canvas { background: #eeeeee; display: inline; margin: auto ; }
-      button {  width: 80px;height: 60px;background: #3ee7; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
+      .buttonA {width: 80px;height: 50px;background: #f63f; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
+      button { width: 80px;height: 50px;background: #3ee7; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
       .sample2  {
                    margin-left:auto;           /* IE以外用の中央寄せ */
                    margin-right:auto;          /* IE以外用の中央寄せ */
@@ -33,43 +34,78 @@
         .first-sentence {
             font-weight: bold;
         }
+        .inputtext {
+
+            font-weight: bold;
+            width:  50px;              /* 要素の幅指定 */
+            height: 50px;            /* 周りの余白指定 */
+            display:inline-block;    
+        }
+        .outputtext {
+          width:  80%;              /* 要素の幅指定 */
+          height: auto;            /* 周りの余白指定 */
+          display:inline-block;       
+        }
+.inlineform {
+          display:inline-block;    
+        }
+        #layout01 {
+          width: 20%; /* 幅 */
+          height: 80px;  /* 高さ */
+          float: left;  /* 回り込み */
+        }
+ 
+        #layout02 {
+          width: 20%; /* 幅 */
+          height: 80px;  /* 高さ */
+          float: left;  /* 回り込み */
+        }
     </style>
   </head>
 
   <body>
 
-   <div style="text-align:center;" >
+   <div style="text-align:center; margin: auto;" >
     <h1>立体漢字テスト</h1>
         <article>
-        <div id = "main"></div>
+        <div id = "main">
       <!--  <p id="mojinum">{{ mojinum}}</p>-->
         <h2>第
           <label type="text" id="mondai">{{ mojinum }}</label>
           問
         </h2>
         
-      <div stype="margin: auto;" >
-        <div class="button" >
-          <ul style="list-style:none;text-align:left;margin-left: 10px;">
-            <li>
-            <form action="/kanjitest" id="netxq">
-          <button type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
-        </form>
-        <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data">
-            <button type="submit" class="calbutton" id="butn4" onclick="numclick()">番号指定</button>
-        <!--  <input type="input" id="getnum" name="mojinum" placeholder="問題No" value=""> -->
-           <input  type="input" id="getnum" name="mojinum" value=""  width="60px" height="80px" required>
-         </li>
-          </form>
-            
-        <li><button type="submit" class="calbutton" id="butn2" onclick="animeStart()">再描画</button>
-          <button  type="submit" class="calbutton" id="butn3" onclick="btn3click()">解答</button>
-      </li>
-        </ul>
+<!--        <div class="button" style="list-style:none;text-align:left;margin-left: 10px;">-->
+      <div style="display:inline-block">
+          <form action="/kanjitest" id="netxq">
+            <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
+        <!--    <div class="outputtext"  >
+              「次の問題」---次の漢字の描画が始まります
+            </div>-->
+            </form>
+            <div style="float: left;">
+              <button type="submit" class="calbutton" id="yomibtn" onclick="dspyomi()">解答</button>
+             <!--   <div class="outputtext"  >
+                  「解答」----漢字の読みと説明を表示します
+                </div> -->
+            </div>
         </div>
+        <div >
+          <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data">
+              <button type="submit" class="calbutton" id="butn4">番号指定</button>
+              <input  class="inputtext" type="input" id="getnum" name="mojinum" value=""  required;>
+            </form>
+            <button type="submit" class="calbutton" id="butn2" onclick="animeStart()">再描画</button>
+        </div>
+         <!--   <div class="outputtext"  >
+            「再描画」---もう一度同じ漢字の描画が始まります
+            </div>-->
+        <div style="width: 70%; margin: auto;">
+          <div id="yomi" style="font-weight: bold;"></div>
+          <div id="setumeibun" style="font-weight: bold;"></div>
         </div>
           <canvas id="myCanvas" width="640" height="480"></canvas>
-        </div>
+        
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">
@@ -94,26 +130,19 @@
         numElement.value = String(mno)
 
         }
-        function btn3click(){
-          clearInterval(timerId);
-        }
+        
         function mojicheck(){
           var flag = 0;
-
           if(document.form1.post1.value.match(/[^0-9]+/)){
               flag = 1;
           }
           if(flag){
-
               window.alert('数字以外が入力されています'); // 数字以外が入力された場合は警告ダイアログを表示
               return false; // 送信を中止
-
           }
           else{
             return true; // 送信を実行
-
           }
-
         }
         
       var img = null;
@@ -129,7 +158,7 @@
       var scrn = 50;
       var shiten = [460, 800, 800];
       var foucas = [hen * 18, hen * 18, 0];
-      console.log ("foucas:",foucas)
+//      console.log ("foucas:",foucas)
       var sin_a = 0;
       var sin_b = 0;
       var cos_a = 0;
@@ -161,23 +190,54 @@
       var timerId = '';
       var tmpdata = '{{ kdata }}';
       var moji_num = '{{ mojinum }}';
-      var mvPtn=1;
+      var setumei = '{{ setumei}}';
+      var mvPtn=2;
+      var animeStartSW = false
 
       animeStart()
+
       function main(){
 
         document.getElementById("mondai").textContent = moji_num
 
-        if (kdata=[]){
+        if (kdata==[]){
 
         } else{
         animeStart()
         }
       }
+
+      function dspyomi(){
+        //　解答ボタン処理：読みを表示する
+//          console.log("解答",setumei)
+          if (animeStartSW == false){
+            return;
+          }
+          clearInterval(timerId);
+          document.getElementById("yomi").textContent = "<<描画終了>>"
+          foucas[0] = 750
+          foucas[1] = 750
+          shiten[0] = foucas[0]
+          shiten[1] = foucas[1]
+          shiten[2] = 3800
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          draw_kdata(kdata,shiten);
+          yomilist = setumei.split(";")
+         // document.getElementById("onyomi").innerText = "【音読み】" + yomilist[0]
+//          document.getElementById("onyomi").innerText = yomilist[0]
+//          document.getElementById("kunyomi").innerText = "【訓読み】" + yomilist[1]
+//          document.getElementById("setumei").innerText = yomilist[2]
+          document.getElementById("yomi").textContent = "【音読み】："+ yomilist[1] + "    " + "【訓読み】：" + yomilist[2] + "\n"
+          document.getElementById("setumeibun").textContent = yomilist[3]
+          
+      }
+
+
 //アニメーションスタート
       function animeStart(){
         console.log("anime start -----");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        animeStartSW = false
 
         kanjiinit();
         moveCount = 0
@@ -190,13 +250,17 @@
           shiten = [460, 800, 800];
 
         }
+        mvPtn = 2
         //console.log(kdata)
+        
+        document.getElementById("yomi").textContent = "<<漢字描画中>>"
+        document.getElementById("setumeibun").textContent = " "
         timerId = setInterval(moveKanji,1500);
       }
 
       function kanjiinit(){
       // pythonから受けっとった漢字データの文字列（tmpdata）をkdataの配列に変換
-      
+        console.log("tmpdata",tmpdata)
         data_list = tmpdata.split("],");
         kdata = [];
         kanjiCubes=[];
@@ -252,9 +316,17 @@
 
       }
 
+      function draw_polygonxx(x0,y0,x1,y1,x2,y2,x3,y3,color){
+        var starttime = new Date().getTime();
+        var endtime=0;
+        while( (endtime-starttime) < 1000){
+          endtime = new Date().getTime();
+        }
+        var id = setTimeout( draw_polygonXX(x0,y0,x1,y1,x2,y2,x3,y3,color), 2000 ); // 1000ミリ秒後にsome_function()を実行
+  
+       
+      }
       function draw_polygon(x0,y0,x1,y1,x2,y2,x3,y3,color){
-
-        //ctx.fillStyle = 'rgb(0,0, 255)';
         ctx.fillStyle =color
         ctx.beginPath();
         ctx.moveTo(x0,y0);
@@ -273,32 +345,34 @@
         let ih = kdata.length;
         let iw = kdata[0].length;
 
-        console.log("startY",startY,endY,houkouY,"startX",startX,endX,houkouX,"shite",shiten)
+        //console.log("startY",startY,endY,houkouY,"startX",startX,endX,houkouX,"shite",shiten)
         //for (let yy = startY[0]; yy >= end[y] ; yy--) {
        
         let yi = 0;
 
         while(yi < 2 ){
-          if (houkouY[yi] == 0){ //0 の時はshiten[1]　は無効
+          if (startY[yi] == -999){ //0 の時はshiten[1]　は無効
             break;
           }
           let yy = startY[yi];
           while(yy != endY[yi]){
             let xi  = 0;
+
             while(xi < 2){
-              if (houkouX[xi] == 0){
+              if (startX[xi] == -999){
                 break;
               }
               let xx = startX[xi];
               //for (let xx = 0; xx < kdata[yy].length; xx++) {
               while(xx != endX[xi]){
-
+                
                 if (kdata [yy] [xx] != 0) {
                   let tCube = getcube3Dpos(kdata,xx,yy,hen); // 1つの立方体の8頂点の座標をコピー
-                //console.log(kanjiCubes.length,"idx",idx,"tCube",tCube)
+                
                   syazou (tCube);
                   dsp_cube (plane, xx, yy,kdata,tCube);
                 }
+                
                 xx = xx + houkouX[xi]
               }
               xi += 1
@@ -333,9 +407,10 @@
         let ih = kdata.length;
         let iw = kdata[0].length;
         vextUP = false
-        //console.log("x:y",xx,yy,"shite",shiten,"-->",tCube)
-        //正面判断
-        //console.log("iw",iw,"xx",xx);
+        //console.log("x:y",xx,yy,plane,"tCube",tCube)
+        //
+        //alert(`yy ${yy} xx${xx} :${plane} tCube ${tCube}`);
+
          //左面
          if ((xx > 0 && kdata [yy] [xx - 1] == 0 )|| xx == 0) {
            //console.log("左面候補",xx,yy,"shiten",shiten,tCube)
@@ -354,7 +429,7 @@
         //上下面
         if ((yy > 0 && kdata [yy - 1] [xx] == 0) || yy == 0) {
           if (shiten[1] > tCube[3][1]){
-              draw_polygon (plane [0] [0], plane [0] [1], plane [3] [0], plane [3] [1], plane [7] [0], plane [7] [1], plane [4] [0], plane [4] [1],'gray');
+              draw_polygon (plane [0] [0], plane [0] [1], plane [3] [0], plane [3] [1], plane [7] [0], plane [7] [1], plane [4] [0], plane [4] [1],'tomato');
          //     console.log("上面描画");
           };
         };
@@ -442,13 +517,13 @@
                 res[0] = [];
             } 
             for (jj=0;jj< col2;jj++){
-                if (jigen = 1){
+                if (jigen == 1){
                     res[jj] = 0;
                 } else {
                     res[ii][jj] = 0;
                 }
                 for (kk=0;kk< col1;kk++){
-                    if (jigen = 1){
+                    if (jigen == 1){
                         res[jj] +=  aray1[kk] * aray2[kk][jj]
                     } else {
                         res[ii][jj] +=  aray1[ii][kk] * aray2[kk][jj]
@@ -462,119 +537,89 @@
 // ------   movekanji
       function moveKanji(){
       var r = 2500;
-
+//      var mvx = [[2500,750,800],[2000,2000,800],[750,2500,700],[350,2000,700],[-750,750,800],[750,-750,700],[3000,350,1500]]
+      var mvx = [[2500,750,800],[2000,1800,800],[750,2100,400],[350,2000,700],[-750,750,400],[750,-750,700],[3000,350,1500]]
 
         let ih = kdata.length
+        let iw = kdata[0].length
         moveCount += 1;
         
-        if(mvPtn ==2 ){
-
-        }else{
-
-        }
-        
-        if (moveCount > 20){ 
-          clearInterval(timerId);
+        if (moveCount > 10){ 
+            clearInterval(timerId);
+            document.getElementById("yomi").textContent = "<<描画終了>>"
         }else {
           if(mvPtn ==2 ){
-
+// console.log("movekanji:a1=",a1,shiten,foucas)
             radian1 = a1 * ( Math.PI / 180 )
-            x = Math.floor(500 * Math.cos(radian1));
-            y = Math.floor(500 * Math.sin(radian1));
+            x = Math.floor(1600 * Math.cos(radian1));
+            y = Math.floor(1600 * Math.sin(radian1));
 
-            shiten[0] = foucas[0] + x;
-            shiten[1] = foucas[1] + y;
-            shiten[2] += 200
-
-            a1 += 15
-
-          }else{
-  
-          if (moveCount < 15){
-            radian1 = a1 * ( Math.PI / 180 )
-            x = Math.floor((r) * Math.cos(radian1));
-            y = Math.floor((r) * Math.sin(radian1));
-      
-            //shiten[0] = x +500;
-          //  shiten[0] = Math.min(foucas[0]+x , (ih+5)*hen)
-            shiten[0] = foucas[0] + x;
-            shiten[1] = foucas[1] + y;
-            if (Math.abs(shiten[0] - foucas[0]) < 300){
-              shiten[2] = 300
-            }else{
-              shiten[2] = 1000
+            shiten[0] = 750 + x;
+            foucas[0] = Math.max(750 + x/2,0);
+            shiten[1] = 750 + y;
+            foucas[1] = Math.max(750 + y/2,0);
+            if (moveCount>10){
+              shiten[2] += 100
+              a1 += 15
+            } else{
+              shiten[2] = 800
+              a1 += 30
             }
-//              if (Math.min(Math.abs(shiten[0]) - foucas[0]),Math.abs(shiten[1])) < ih*hen){
-//              shiten[2] = 1000
-//            
-//            if (Math.abs( foucas[1] - y)>500){
-//            if(Math.min(x,y) < 500 )
+          }else{
+              //window.alert(shiten)
+              tmpidx = moveCount %7
+             // tmpidx = 1
+
+              shiten[0] = mvx[tmpidx][0];
+              shiten[1] = mvx[tmpidx][1];
+              shiten[2] = mvx[tmpidx][2];
               
-          } else {
-            shiten[2] += 300;
+              //window.alert(mvx[tmpidx])
           }
-          a1 += 15;
-          }
+        }
 
 
         // 陰面消去のため、上から描画と下から描画をわける
-          if (shiten[1] <= 0 ){
-            startY[0] = 0;
-            endY[0] =  kdata.length ;
-            houkouY[0] = 1
-            startY[1] = -999;
-            endY[1] =  -999;
-            houkouY[1] = 0
-          } else if(shiten[1] >= (kdata.length +1) * hen) {
-              startY[0] = kdata.length -1;;
-              endY[0] = -1;
-              houkouY[0] = -1
-              startY[1] = -999;
-              endY[1] =  -999;
-              houkouY[1] = 0;
-         
-          } else {
-            //kdataの配列は上が０なので、indexの計算が複雑
-            bunki = Math.floor(shiten[1] / hen) + 1
-            bunkiIDX = ih -bunki;
-            startY[0] = 0
-            endY[0] =  bunkiIDX + 1;
-            houkouY[0] = 1           
-            startY[1] = kdata.length -1;
-            endY[1] = bunkiIDX ;
-            houkouY[1] = -1
-            ;
-          }
-          if (shiten[0] > (kdata[0].length +1) * hen){
-            startX[0] = 0;
-            endX[0] =  kdata[0].length ;
-            houkouX[0] = 1
-            startX[1] = -999;
-            endX[1] =  -999;
-            houkouX[1] = 0;
-          } else if(shiten[0] < 0 ) {
-              startX[0] = kdata[0].length -1;;
-              endX[0] = -1;
-              houkouX[0] = -1
-              startX[1] =-999;
-              endX[1] =  -999;
-              houkouX[1] = 0;
-         
-          } else {
-            startX[0] = 0;
-            endX[0] =  Math.floor(shiten[0] / hen) + 1;
-            houkouX[0] = 1;
-            startX[1] = kdata[0].length -1;;
-            endX[1] =  Math.floor(shiten[0] / hen);
-            houkouX[1] = -1
-            
-            ;
-          }
-
+          hyoujijyun(startY,endY,houkouY,shiten[1],foucas[1],ih,hen,true);
+          hyoujijyun(startX,endX,houkouX,shiten[0],foucas[0],iw,hen,false);
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           draw_kdata(kdata,shiten);
+          //window.alert(shiten)
+          animeStartSW = true
+          
         }
-
+    function hyoujijyun(startA,endA,houkouA,shitenA,foucasA,haba,hen,revSW){
+        //x軸の処理
+          upMax = (haba -1) * hen 
+          downMin = 0
+          let shoumen = Math.floor(shitenA / hen) //sx は正面のBlockの配列のインデックスになっている
+          if ((revSW == false &&shitenA >= upMax) || (revSW ==true && shitenA <= downMin) ){
+             //全てを上から見る
+              startA[0] = 0;
+              endA[0] =  haba ;
+              houkouA[0] = 1
+              startA[1] = -999;
+              endA[1] =  -999;
+              houkouA[1] = 0;
+          } else if((revSW == false && shitenA <= downMin) || (revSW == true && shitenA >= upMax )) {
+              startA[0] = haba -1;
+              endA[0] = -1;
+              houkouA[0] = -1
+              startA[1] =-999;
+              endA[1] =  -999;
+              houkouA[1] = 0;
+          } else {
+              if (revSW == true){ //Y面の配列は0が高く、下が大きいのでインデックスが逆になる
+                shoumen = haba -shoumen;
+              } 
+              startA[0] = 0
+              endA[0] =  Math.min(shoumen ,haba) +1;  //バグでも動くように念のため
+              houkouA[0] = 1;
+              startA[1] = haba -1;
+              endA[1] =  shoumen - 1;
+              houkouA[1] = -1
+               
+          }
       }  
   //    xhr.onload = function () {
   //      alert(`Done, got ${xhr.response}`);

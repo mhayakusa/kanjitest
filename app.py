@@ -54,6 +54,14 @@ def kanjitest():
         if '--Start--' in data:
             if data_count + 1 == kanjiNo:
                 taisyouSW = True
+                tmpdata = data.split(",")
+                if len(tmpdata) >= 2:
+#                    print("tempdata",tmpdata)
+#                    setList = tmpdata[1].split(";")
+#                    setumei = setList[1] + setList[2]
+                     setumei = tmpdata[1]
+                else:
+                    setumei = ''
             data_count += 1
         else:
             if taisyouSW :
@@ -68,7 +76,8 @@ def kanjitest():
                         kdata =  kdata + ",[" + data + "]"
     kanjiDataF.close()
 
-    return render_template('kanjitest.html', kdata=kdata,mojinum=moji_num)
+#    return render_template('kanjitest.html', kdata=kdata,mojinum=moji_num,setumei=setumei)
+    return render_template('kanjitest.html', kdata=kdata,mojinum=moji_num,setumei=setumei)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

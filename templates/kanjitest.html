@@ -20,7 +20,7 @@
                 canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"500px"; height:"500px"}
             }
     	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"474px"; height:"500px"; }
-      .buttonA {width: 80px;height: 50px;background: #f63f; color: black; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
+      .buttonA {width: 100px;height: 80px;background: rgb(250, 129, 89); color: black;border: 3px solid black; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
       button { width: 80px;height: 50px;background: #3ee7; color: black; 
                 padding:10px 0 10px;
                 border-radius: 10px;
@@ -80,9 +80,10 @@
         </h2>
         <table style="clear: both;margin:auto;">
           <tr><TD>
-        <form action="/kanjitest" id="netxq">
-          <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
-          </form></TD>
+            <button type="submit"  style="background: rgba(179, 248, 165, 0.507);" id="yomibtn" onclick="dspyomi()">答え</button>
+          </TD>
+          <TD>
+            <button type="submit" id="butn2" onclick="animeStart()">再描画</button></TD>
           <TD>
           <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data" style="float:left;">
             <button type="submit" id="butn4" alt="入力した番号にジャンプ">番号指定</button>
@@ -90,13 +91,19 @@
           </form>
         </TD></tr>
     <TR><TD>
-      <button type="submit"  style="background: rgba(245, 197, 67, 0.507);" id="yomibtn" onclick="dspyomi()">答え</button>
-    </TD><TD>
-       <button type="submit" id="butn2" onclick="animeStart()">再描画</button>
+      
+      <form action="/kanjitest" id="netxq">
+      <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
+    </form>
       </TD>
+      <TD></TD>
       <TD></TD>
       <TD><button type="button" style="background:rgb(247, 131, 131)" onclick="window.location = '/'">戻る</button></TD>
   </table>
+  
+  <P>
+
+  </P>
   <div style="width: 70%; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black; ">
           <div id="yomi" style="font-weight: bold;"></div>
           <div id="setumeibun" style="font-weight: bold;"></div>

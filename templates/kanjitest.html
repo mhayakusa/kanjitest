@@ -2,21 +2,24 @@
   <head>
     <meta charset="utf-8" />
     <title>立体漢字クイズ</title>
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+   <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.1">-->
       <style>
     	* { padding: 5px; margin: 0; }
-      @media screen and (min-width: 767px) { /*ウィンドウ幅が767px以上の場合に適用*/
+      @media screen and (min-width: 764px) { /*ウィンドウ幅が767px以上の場合に適用*/
           main {
                     background-color: #f1bed2; /*青色*/
                     text-align: center;
                 }
-            }           
+            }
+            canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"500px"; height:"500px"}           
       @media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/
                 main{
                     background-color: #00FF00; /*緑色*/
+                   
                 }
+                canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"500px"; height:"500px"}
             }
-    	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; }
+    	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"474px"; height:"500px"; }
       .buttonA {width: 80px;height: 50px;background: #f63f; color: black; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
       button { width: 80px;height: 50px;background: #3ee7; color: black; 
                 padding:10px 0 10px;
@@ -24,18 +27,14 @@
                 display: inline; font-size:16px; font-weight: bold; 
                 align-items: center ;
              }
-      .sample2  {
-                   margin-left:auto;           /* IE以外用の中央寄せ */
-                   margin-right:auto;          /* IE以外用の中央寄せ */
-                   text-align:left;            /* 中身を左寄せに戻す */
-      }
-      #butn1 { background: #ffccee; }
+      .body{
+                text-align: center;
+           }
       .container {
             width: 90%;
             margin: auto;
         }
- 
-        .first-sentence {
+      .first-sentence {
             font-weight: bold;
         }
         .inputtext {
@@ -67,51 +66,46 @@
     </style>
   </head>
 
-  <body>
+  <body class="body">
 
    <div style="text-align:center; margin: auto;" >
-    <h1>立体漢字テスト</h1>
-        <article>
+  <!--  <h1><font color="green">立体</font><font color="blue">漢字</font><font color="red">クイズ</font></h1>-->
+  <h1>立体漢字クイズ</h1>
         <div id = "main">
       <!--  <p id="mojinum">{{ mojinum}}</p>-->
+      <P></P>
         <h2>第
           <label type="text" id="mondai">{{ mojinum }}</label>
           問
         </h2>
-        <div style="display:inline-block">
-          <div style="float: left;">
-          <form action="/kanjitest" id="netxq">
-            <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
-        <!--    <div class="outputtext"  >
-              「次の問題」---次の漢字の描画が始まります
-            </div>-->
-            </form>
-          </div>
-          <div style="float: left;">
-            <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data">
-              <button type="submit" class="calbutton" id="butn4">番号指定</button>
-              <input  class="inputtext" type="input" id="getnum" name="mojinum" value=""  required;>
-            </form>
-          </div>
-      </div>
-      <div >
-        <button type="submit" class="calbutton" style="background: rgba(240, 187, 44, 0.467);" id="yomibtn" onclick="dspyomi()">解答</button>
-       <!--   <div class="outputtext"  >
-            「解答」----漢字の読みと説明を表示します
-          </div> -->
-        <button type="submit" class="calbutton" id="butn2" styyle="padding: 1px;" onclick="animeStart()">再描画</button>
-    
-      </div>
-         <!--   <div class="outputtext"  >
-            「再描画」---もう一度同じ漢字の描画が始まります
-            </div>-->
-      <div style="width: 70%; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black">
+        <table style="clear: both;margin:auto;">
+          <tr><TD>
+        <form action="/kanjitest" id="netxq">
+          <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
+          </form></TD>
+          <TD>
+          <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data" style="float:left;">
+            <button type="submit" id="butn4" alt="入力した番号にジャンプ">番号指定</button>
+            <input  class="inputtext" type="input" id="getnum" name="mojinum" value="" maxlength="2" required;>
+          </form>
+        </TD></tr>
+    <TR><TD>
+      <button type="submit"  style="background: rgba(245, 197, 67, 0.507);" id="yomibtn" onclick="dspyomi()">答え</button>
+    </TD><TD>
+       <button type="submit" id="butn2" onclick="animeStart()">再描画</button>
+      </TD>
+      <TD></TD>
+      <TD><button type="button" style="background:rgb(247, 131, 131)" onclick="window.location = '/'">戻る</button></TD>
+  </table>
+  <div style="width: 70%; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black; ">
           <div id="yomi" style="font-weight: bold;"></div>
           <div id="setumeibun" style="font-weight: bold;"></div>
       </div>
+      <p>
       <div>
-      <canvas id="myCanvas" width="700" height="500 paddig:50px"></canvas>
-    </div> 
+      <canvas id="myCanvas"  width="600" height="500"></canvas>
+      </div>
+      </p> 
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">
@@ -241,7 +235,7 @@
 
 //アニメーションスタート
       function animeStart(){
-        console.log("anime start -----");
+        //console.log("anime start -----");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         animeStartSW = false
 
@@ -554,7 +548,7 @@
         if (moveCount > 15){ 
             clearInterval(timerId);
             document.getElementById("yomi").textContent = "<<描画終了>>"
-            document.getElementById("setumeibun").textContent = "「次の問題」で進みます。「解答」でこの漢字の読みを表示します。"
+            document.getElementById("setumeibun").textContent = "「次の問題」で進みます。「解答」で読みを表示します。"
         }else {
           if(mvPtn ==2 ){
 // console.log("movekanji:a1=",a1,shiten,foucas)

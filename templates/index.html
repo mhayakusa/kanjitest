@@ -43,22 +43,34 @@
     </head>
     <body class="body" >
         <h1 >立体漢字クイズ</h1>
+        <P></P>
         <div style="font-size:20px; font-weight: bold;">
-        色々な角度から見た一文字の立体漢字を描画します。どんな漢字か考えてください。
+        色々な角度から見た漢字を一文字の描画します。どんな漢字か考えてください。
         </div>
+        <p>
         <div class="container">
-            <ul style="list-style:none;text-align:left;font-weight: bold;padding: 1px;">
+            <ul  style="list-style:none;text-align:left;font-weight: bold;padding: 1px;">
                 
-                <li>漢検準二級の漢字約３２０字から２０問ランダムに出題されます。</li>
+                <li>漢検二級までの約５００字と準一級程度の約８００字を用意しています。</li>
+                <li>漢検二級か準一級どちらかを選択してください。ランダムに２０字が出題されます</li>
+                <li><BR>        ---- 漢字描画ページのボタンの説明-----</li>
                 <li>「解答」ボタンをクリックすると、漢字とその読みが表示されます。</li>
                 <li> 　　　採点機能は未実装です</li>
                 <li>「次の問題」ボタンで、次の文字が描画されます。</li>
                 <li>もう一度同じものを見たいときは、「再描画」を押してください。</li>
-                <li>「問題番号」に数値を入れるとその問題番号へジャンプします。見終わった漢字をもう一度見られます。</li>
+                <li>「問題番号」で入力した問題番号へジャンプします。</li>
                 </ul>
         </div>
         <div>
-        <button onclick="location.href='/kanjitest'">開始</button>
+        </p>
+        <form action='/kanjitest' style="font-size: 18px; font-weight: bold">
+            <input type="radio" name="klevel" value="2"checked>漢検二級・準二級
+            <p>
+            <input type="radio" name="klevel" value="1" >漢検準一級
+            </p><p>
+            <button type="submit" style="color: black">開始</button>
+            </p>
+        </form>
         </div>
     </body>
 </html>

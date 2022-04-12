@@ -1,15 +1,37 @@
+from csv import QUOTE_NONE
 import os
 from flask import Flask, render_template, request,session
 import random
+
 app = Flask(__name__)
 app.secret_key = 'abcdefghijklmn'
 #app.permanent_session_lifetime = timedelta(minutes=3) 
 
+qlist=[]
+quizFile=""
+klevel=""
+
+def quiz_init():
+    global quizFile,qlist,klevel
+    klevel = request.args.get("klevel")
+    print("klevel",klevel)
+    if klevel == None:
+        kleve = "2"
+    if klevel == "2":
+        quizFile = 'kanjiData_2022-04-12_2kyu.txt'
+        qlist = random.sample(range(1,525),20)
+        session["qnos"] = qlist
+        session["qfile"] = quizFile
+    else:
+        quizFile = 'kanjiData_2022-04-12_準一級.txt'
+        qlist = random.sample(range(1,849),20)
+        session["qnos"] = qlist
+        session["qfile"] = quizFile
+
 @app.route('/')
 def main():
-    x = random.sample(range(328),20)
     session.permanent = True  
-    session["qnos"] = x 
+    session["start"] = True 
     return render_template('index.html')
 
 @app.route('/getnext' ,methods=['GET','POST'])
@@ -18,9 +40,25 @@ def getnext():
 
 @app.route('/kanjitest' ,methods=['GET','POST'])
 def kanjitest():
+    global quizFile,qlist
+
+    if "start" in session:
+        if session["start"] == True:
+            session["start"] = False
+            quiz_init()
+        else:
+            if "qnos" in session:
+                qlist = session["qnos"]
+                quizFile=session["qfile"]
+            else:
+                quiz_init()
+    else: 
+        session.permanent = True 
+        session["start"] = False
+        quiz_init()
+        
     kdata =''
-    
-    kanjiDataF =  open('kanjiData_2022-04-09_new.txt','r',encoding='utf8')
+    kanjiDataF =  open(quizFile,'r',encoding='utf8')
     
     if request.method == "GET":
         st_moji_num = request.args.get("mojinum")
@@ -36,14 +74,12 @@ def kanjitest():
             moji_num = 1   
     
     if (moji_num > 0 and moji_num <=20):
-        if "qnos" in session:
-            x = session["qnos"]
-            kanjiNo = x[moji_num - 1]
-        else:
-            kanjiNo = moji_num
+        kanjiNo = qlist[moji_num - 1]
     else:
         kanjiNo = 1
         moji_num = 1
+
+    print("qlist",quizFile,qlist)
 
     print(moji_num,kanjiNo)
 

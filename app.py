@@ -79,9 +79,9 @@ def kanjitest():
         kanjiNo = 1
         moji_num = 1
 
-    print("qlist",quizFile,qlist)
+   # print("qlist",quizFile,qlist)
 
-    print(moji_num,kanjiNo)
+    #print(moji_num,kanjiNo)
 
     data_count = 0
     taisyouSW = False

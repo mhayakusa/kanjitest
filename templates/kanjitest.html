@@ -10,7 +10,6 @@
                     background-color: #f1bed2; /*青色*/
                     text-align: center;
                 }
-           
             .canvas-parent {
               position: relative; 
               height: 0; 
@@ -20,7 +19,8 @@
               height:500px;
               max-width: 700px; 
               max-height: 500px; 
-              margin: 10px auto; 
+              margin: 5px auto;
+         /*     margin: 10px auto; */ 
             }  
           }       
       @media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/
@@ -35,9 +35,15 @@
                   max-height: 500px; 
                   margin: 10px auto; 
                 } 
-            }
+      }
+      .wrapper {
+          display: grid;
+          grid-template-columns: 1fr ; 
+          grid-template-rows: 50px 80px 80px 600px;
+          grid-gap: 5px;
+      }
     	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"474px"; height:"500px"; }
-      .buttonA {width: 80px;height: 60px;background: rgb(250, 129, 89); color: black;border: 3px solid black; display: inline; font-size:18px; font-weight: bold; align-items: center ; }
+      .buttonA {width: 80px;height: 50px;background: rgb(250, 129, 89); color: black;border: px solid black; display: inline; font-size:16px; font-weight: bold; align-items: center ; }
       button { width: 60px;height: 40px;background: #3ee7; color: black; 
                 padding:5px 0 5px;
                 border-radius: 5px;
@@ -91,55 +97,51 @@
          
     </style>
   </head>
-
   <body class="body">
-
-   <div style="text-align:center; margin: auto;" >
-  <!--  <h1><font color="green">立体</font><font color="blue">漢字</font><font color="red">クイズ</font></h1>-->
-  <h1>立体漢字クイズ</h1>
-        <div id = "main">
-      <!--  <p id="mojinum">{{ mojinum}}</p>-->
-      <P></P>
-        <h2>第
-          <label type="text" id="mondai">{{ mojinum }}</label>
-          問
-        </h2>
-        <table style="clear: both;margin:auto;">
-          <tr><TD>
-            <button type="submit"  style="background: rgba(179, 248, 165, 0.507);font-size:18ps;" id="yomibtn" onclick="dspyomi()">答え</button>
-          </TD>
-          <TD>
-            <button type="submit" id="butn2" onclick="animeStart()">再描画</button></TD>
-          <TD>
-          <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data" style="float:left;">
-            <button type="submit"  id="butn4" style="font-size:14px;">番号指定</button>
-            <input  class="inputtext" type="input" id="getnum" name="mojinum" value="" maxlength="2" required;>
+    <div id = "main">
+      <div style="font-size:22px;font-weight: bold">立体漢字クイズ
+      </div>
+      <div style ="font-size:20px;font-weight: bold">【第<label type="text" id="mondai">{{ mojinum }}</label>問】
+      </div>
+  <div class=""wrapper>
+      <div class="box1">
+        <table style="clear: both;margin:auto;height: 60px; text-align: left;">
+        <tbody><tr>
+        <td style="text-align: left;">
+        <button type="submit" style="background: rgba(179, 248, 165, 0.507);font-size:16ps;" id="yomibtn" onclick="dspyomi()">答え</button>
+        </td>
+        <td style="text-align: left;">
+          <button type="submit" id="butn2" onclick="animeStart()">再描画</button> 
+        </td>
+        <form name="inNumFm" action="/kanjitest" id="qno" method="POST" enctype="multipart/form-data" style="float:left;"></form>
+          <td></td>
+          <td>
+            <button type="submit" id="butn4" style="font-size:14px;">番号指定</button>
+            <input class="inputtext" type="input" id="getnum" name="mojinum" value="" maxlength="2" required;="">
+          </td>
+          
+        </tr>
+        <tr>
+        <td style="text-align: left;">
+          <form action="/kanjitest" id="netxq">
+          <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
           </form>
-        </TD></tr>
-    <TR><TD>
-      
-      <form action="/kanjitest" id="netxq">
-      <button class="buttonA" type="submit" name="mojinum" value="" id="nextbtn" onclick="btn4click()">次の問題</button>
-    </form>
-      </TD>
-      <TD></TD>
-      <TD><button type="button" style="background:rgb(247, 131, 131); border: 2px solid black;" onclick="window.location = '/'">戻る</button></TD>
-  </table>
-  
-  <P>
+        </td>
+        <td></td><td></td>
+        <td><button type="button" style="background:rgb(247, 131, 131); border: 1px solid black;" onclick="window.location = '/'">戻る</button></td>
+        </tr>
+        </tbody>
+        </table>
 
-  </P>
-  <div style="width: 90%; max-width:700px; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black; ">
-          <div id="yomi" style="font-weight: bold;"></div>
-          <div id="setumeibun" style="font-weight: bold;"></div>
-      </div>
-      <p>
-<!--      <div class="canvas-parent">  -->
-      <div>   
+    <div class="box3">
+      <div style="width: 90%; max-width:700px; margin: auto; padding: auto; margin-bottom: 10px; border: 1px solid black; ">
+      <div id="yomi" style="font-weight: bold;"></div>
+      <div id="setumeibun" style="font-weight: bold;"></div>
+    </div>
+    <div class="canvas-parent">
       <canvas id="myCanvas" width="580" height="500" style="max-width: 100%; height: auto;"></canvas>
-      </div>
-      </p> 
       <div style="text-align:center; font-size: 11pt">※漢字の読み、説明はGoo辞典を引用しています。https://dictionary.goo.ne.jp/kanji/</div>
+    </div>
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">

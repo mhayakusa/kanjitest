@@ -19,7 +19,7 @@
               height:500px;
               max-width: 700px; 
               max-height: 500px; 
-              margin: 5px auto;
+              margin: 10px auto;
          /*     margin: 10px auto; */ 
             }  
           }       
@@ -33,13 +33,13 @@
                   height:300px;
                   max-width: 640px; 
                   max-height: 500px; 
-                  margin: 10px auto; 
+                  margin: 20px auto; 
                 } 
       }
       .wrapper {
           display: grid;
-          grid-template-columns: 1fr ; 
-          grid-template-rows: 50px 80px 80px 600px;
+/*          grid-template-columns: 1fr ; 
+          grid-template-rows: 50px 50px 50px 600px;*/
           grid-gap: 5px;
       }
     	canvas { background: #eeeeee; display: inline; margin: auto ;padding: auto; width:"474px"; height:"500px"; }
@@ -103,7 +103,7 @@
       </div>
       <div style ="font-size:20px;font-weight: bold">【第<label type="text" id="mondai">{{ mojinum }}</label>問】
       </div>
-  <div class=""wrapper>
+ <!-- <div class=""wrapper>-->
       <div class="box1">
         <table style="clear: both;margin:auto;height: 60px; text-align: left;">
         <tbody><tr>
@@ -139,9 +139,9 @@
       <div id="setumeibun" style="font-weight: bold;"></div>
     </div>
     <div class="canvas-parent">
-      <canvas id="myCanvas" width="580" height="500" style="max-width: 100%; height: auto;"></canvas>
-      <div style="text-align:center; font-size: 11pt">※漢字の読み、説明はGoo辞典を引用しています。https://dictionary.goo.ne.jp/kanji/</div>
+    <canvas id="myCanvas" width="580" height="500" style="max-width: 100%; height: auto;"></canvas>
     </div>
+    <div style="text-align:center; font-size: 11px">※漢字の読み、説明はGoo辞典を引用しています。https://dictionary.goo.ne.jp/kanji/</div>
       <!--  <p id="kdata">{{ kdata}}</p>-->
 
 <script type="text/javascript">

@@ -23,9 +23,9 @@
             }
             .wrapper {
                 display: grid;
-                grid-template-columns: 1fr ; 
-                grid-template-rows: 50px 70px 200px;
-                grid-gap: 30px;
+                grid-template-columns: 1fr 1fr 1fr; 
+                grid-template-rows: 100px 200px 200px;
+                grid-gap: 10px;
             }
             button {  
                 width: 100px;
@@ -50,7 +50,7 @@
     </head>
     <body class="body" >
         <h2 >立体漢字クイズ</h2>
-        <div class="wraper">
+        <div class="wrapper">
             <div></div>
             <div class="box1">
                 <div style="font-size:20px; font-weight: bold;">
@@ -72,19 +72,25 @@
             <div></div>
             <div></div>
             <div class="box3" style="text-align: center">
-                <div>
-                <!--<ul  style="list-style:none;text-align:left;font-size: 16px;font-weight: bold;padding: 1px;"> -->
-                <ul  style="font-size: 16px;font-weight: bold;padding: 1px;">
-                        <li>漢検二級までの約５００字と準一級程度の約８００字を用意しています。</li>
-                    <li>漢検二級か準一級どちらかを選択してください。ランダムに２０字が出題されます</li>
-                    <li><BR>        ---- 漢字描画ページのボタンの説明-----</li>
-                    <li>「答え」ボタンをクリックすると、漢字とその読みが表示されます。</li>
-                    <li> 　　　採点機能は未実装です</li>
-                    <li>「次の問題」ボタンで、次の文字が描画されます。</li>
-                    <li>もう一度同じものを見たいときは、「再描画」を押してください。</li>
-                    <li>「問題番号」で入力した問題番号へジャンプします。</li>
-                </ul>
-                </div>
+                <table style="text-align: center">
+                <tbody<tr>
+                    <TD > </TD>
+                    <TD> <!--<ul  style="list-style:none;text-align:left;font-size: 16px;font-weight: bold;padding: 1px;"> -->
+                        <ul  style="text-align:left;list-style:none;font-size: 16px;font-weight: bold;padding: 1px;">
+                                <li>漢検二級までの約５００字と準一級程度の約８００字を用意しています。</li>
+                            <li>漢検二級か準一級どちらかを選択してください。ランダムに２０字が出題されます</li>
+                            <li style="text-align:center">---- 漢字描画ページのボタンの説明-----</li>
+                            <li>「答え」ボタンをクリックすると、漢字とその読みが表示されます。</li>
+                            <li> 　　　採点機能は未実装です</li>
+                            <li>「次の問題」ボタンで、次の文字が描画されます。</li>
+                            <li>もう一度同じものを見たいときは、「再描画」を押してください。</li>
+                            <li>「問題番号」で入力した問題番号へジャンプします。</li>
+                        </ul>
+                    </TD>
+                    <TDstyle="width:200"></TD>
+                </tr> 
+                </tbody>                   
+                </table>
             </div>
             <div></div>
     </body>

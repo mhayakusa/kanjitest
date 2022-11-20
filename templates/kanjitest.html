@@ -4,7 +4,7 @@
     <title>立体漢字クイズ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
       <style>
-    	* { padding: 5px; margin: 0; }
+    	* { padding: 1px; margin: 0; }
       @media screen and (min-width: 764px) { /*ウィンドウ幅が767px以上の場合に適用*/
           main {
                     background-color: #f1bed2; /*青色*/
@@ -29,12 +29,29 @@
                   height: 0; 
                   overflow: hidden; 
          /* padding-top: 56.25%; */
-                  width:380px;
-                  height:300px;
-                  max-width: 640px; 
-                  max-height: 500px; 
-                  margin: 20px auto; 
+                  width:368px;
+                  height:350px;
+      /*                  max-width: 450px; 
+                  max-height: 450px; */
+                  margin: auto; 
                 } 
+        .buttonA {width: 55px;height: 35px;background: rgb(252, 120, 76); color: black;
+                font-size:14px; font-weight: bold; align-items: center ;
+                border: solid black; display: inline;
+               
+        }
+        button { width: 55px;height: 35px;background: #3ee7; color: black; 
+                padding:5px 0 5px;
+                border-radius: 5px;
+                display: inline; font-size:14px; font-weight: bold; 
+                align-items: center ;
+             }
+        .box3 {
+          font-size:12px; font-weight: bold;
+        }
+        .title{
+          font-size:16px;font-weight: bold; 
+        }
       }
       .wrapper {
           display: grid;
@@ -86,7 +103,7 @@
     <div id = "main">
 <!--     <div style="font-size:22px;font-weight: bold">立体漢字クイズ--> 
       </div>
-      <div style ="font-size:20px;font-weight: bold">【第<label type="text" id="mondai">{{ mojinum }}</label>問】
+      <div class="title" style ="font-size:20px;font-weight: bold">【第<label type="text" id="mondai">{{ mojinum }}</label>問】
       </div>
 <!--   <div class="wrapper">-->
       <div class="box1">
